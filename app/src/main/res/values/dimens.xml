@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="offset_xs">2dp</dimen>
+    <dimen name="offset_s">4dp</dimen>
+    <dimen name="offset_m">8dp</dimen>
+    <dimen name="offset_l">16dp</dimen>
+    <dimen name="offset_xl">24dp</dimen>
+    <dimen name="offset_xxl">32dp</dimen>
+    <dimen name="offset_xxxl">48dp</dimen>
+    <dimen name="offset_xxxxl">64dp</dimen>
+    <dimen name="default_radius">12dp</dimen>
+
+</resources>
