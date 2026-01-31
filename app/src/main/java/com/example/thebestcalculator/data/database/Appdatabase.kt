@@ -12,6 +12,6 @@ import com.example.thebestcalculator.data.database.entities.AppEntity
 )
 abstract class Appdatabase: RoomDatabase() {
 
-    abstract fun AppDao(): AppDao
+    abstract fun appDao(): AppDao
 
 }

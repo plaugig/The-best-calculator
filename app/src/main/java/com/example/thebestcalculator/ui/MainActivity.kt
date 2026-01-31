@@ -2,19 +2,30 @@ package com.example.thebestcalculator.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.thebestcalculator.R
 import com.example.thebestcalculator.databinding.ActivityMainBinding
 import com.example.thebestcalculator.ui.item.ItemData
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(), MainTaskListener{
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
     lateinit var adapter: MainAdapter
+
+    private val viewModel by viewModels<MainViewModel>()
 
     fun op(value: String) = ItemData(
         text = value,
@@ -59,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             BottonItemDecoration(this)
         )
 
-        adapter = MainAdapter()
+        adapter = MainAdapter(this, bottons)
 
         val manager = GridLayoutManager(this, 4)
         manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -72,8 +83,31 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttons.adapter = adapter
 
-        adapter.submitList(bottons)
+        setupObservers()
+    }
+    private fun setupObservers(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                launch {
+                    viewModel.conditionText.collect { text ->
+                        binding.expression.text = text
+                    }
+                }
+                launch {
+                    viewModel.resultText.collect { text ->
+                        binding.result.text = text
+                    }
+                }
+            }
+        }
+    }
 
-
+    override fun onBottonClick(item: ItemData) {
+       when (item.text){
+           "Ac" -> viewModel.clear()
+           "⌫" -> viewModel.removeLast()
+           "=" -> viewModel.calculate()
+           else -> viewModel.addSymbol(item.text)
+       }
     }
 }

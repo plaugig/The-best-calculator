@@ -19,7 +19,13 @@ private val repository: AppRepository
         if (expression.isBlank()) return ""
 
         return try {
-            val buildExpression = ExpressionBuilder(expression).build()
+            val cleanExpression = expression
+                .replace("÷", "/")
+                .replace("—", "-")
+                .replace("卍", "*")
+                .replace("+","+")
+
+            val buildExpression = ExpressionBuilder(cleanExpression).build()
             val result = buildExpression.evaluate()
 
             val formattedResult = if (result % 1==0.0) {

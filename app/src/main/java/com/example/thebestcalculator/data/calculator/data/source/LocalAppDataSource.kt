@@ -12,16 +12,16 @@ class LocalAppDataSource @Inject constructor(
     private val database: Appdatabase
 ) {
     suspend fun saveInput(input: AppEntity){
-        database.AppDao().saveCurrentInput(input)
+        database.appDao().saveCurrentInput(input)
     }
 
     fun observeInput(): Flow<AppEntity?> {
-        return database.AppDao().observeCurrentInput()
+        return database.appDao().observeCurrentInput()
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
     }
 
     suspend fun clearInput() {
-        database.AppDao().clearCurrentInput()
+        database.appDao().clearCurrentInput()
     }
 }

@@ -5,12 +5,13 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thebestcalculator.databinding.BottonBinding
+import com.example.thebestcalculator.ui.MainTaskListener
 
 class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private var binding = BottonBinding.bind(itemView)
 
-    fun bind(item: ItemData) {
+    fun bind(item: ItemData, listener: MainTaskListener) {
         binding.button.text = item.text
 
         val context = binding.root.context
@@ -21,6 +22,9 @@ class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             ContextCompat.getColor(context, item.bgColor)
         )
 
+        binding.button.setOnClickListener {
+            listener.onBottonClick(item)
+        }
 
     }
 

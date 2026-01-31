@@ -12,10 +12,10 @@ class Interactor @Inject constructor(
     }
 
     suspend fun calculate(expression: String): String {
-        return useCase.calculate(String())
+        return useCase.calculate(expression)
     }
 
     suspend fun clearHistory() {
-        return useCase.clearHistory()
+        useCase.clearHistory()
     }
 }

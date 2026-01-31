@@ -7,15 +7,10 @@ import com.example.thebestcalculator.R
 import com.example.thebestcalculator.ui.item.ItemData
 import com.example.thebestcalculator.ui.item.MainViewHolder
 
-class MainAdapter() : RecyclerView.Adapter<MainViewHolder>() {
-
-        var items = mutableListOf<ItemData>()
-
-    fun submitList(list: List<ItemData>){
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
-    }
+class MainAdapter(
+    private val listener: MainTaskListener,
+    private val items: List<ItemData>
+) : RecyclerView.Adapter<MainViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +29,7 @@ class MainAdapter() : RecyclerView.Adapter<MainViewHolder>() {
         holder: MainViewHolder,
         position: Int
     ) {
-       holder.bind(items[position])
+       holder.bind(items[position], listener)
     }
 
     override fun getItemCount(): Int = items.size
