@@ -24,6 +24,7 @@ private val repository: AppRepository
                 .replace("—", "-")
                 .replace("卍", "*")
                 .replace("+","+")
+                .replace("%", "/100")
 
             val buildExpression = ExpressionBuilder(cleanExpression).build()
             val result = buildExpression.evaluate()

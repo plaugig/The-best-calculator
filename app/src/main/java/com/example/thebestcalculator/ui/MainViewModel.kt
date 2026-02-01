@@ -22,26 +22,59 @@ class MainViewModel @Inject constructor(
     private val _resultText = MutableStateFlow("")
     val resultText: StateFlow<String> = _resultText.asStateFlow()
 
-    fun addSymbol(symbol: String){
-        _conditionText.value += symbol
+    fun addSymbol(symbol: String) {
+        val currentText = _resultText.value
+
+        val operator = listOf("+", "—", "÷", "卍", "*", "/", "%")
+
+        if (currentText.isNotEmpty()){
+            val latChar = currentText.last().toString()
+
+            if (operator.contains(latChar) && operator.contains(symbol)) {
+                _resultText.value = currentText.dropLast(1) + symbol
+            } else {
+                _resultText.value += symbol
+            }
+        } else {
+            if (!operator.contains(symbol)) {
+                _resultText.value += symbol
+            }
+        }
     }
 
-    fun clear(){
+    fun clear() {
         _conditionText.value = ""
         _resultText.value = ""
+
+        viewModelScope.launch {
+            interactor.clearHistory()
+        }
     }
 
-    fun removeLast(){
-        if (_conditionText.value.isNotEmpty()){
+    fun removeLast() {
+        if (_conditionText.value.isNotEmpty()) {
             _conditionText.value = _conditionText.value.dropLast(1)
         }
     }
 
-    fun calculate(){
+    fun calculate() {
         viewModelScope.launch {
-            val expression = _conditionText.value
+            val expression = _resultText.value
             val result = interactor.calculate(expression)
+
+            _conditionText.value = expression
             _resultText.value = result
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            interactor.getSaveData().collect { lastData ->
+                if (lastData != null) {
+                    _conditionText.value = lastData.expression
+                    _resultText.value = lastData.result
+                }
+            }
         }
     }
 

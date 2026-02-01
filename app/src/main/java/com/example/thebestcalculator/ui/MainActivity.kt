@@ -110,4 +110,6 @@ class MainActivity : AppCompatActivity(), MainTaskListener{
            else -> viewModel.addSymbol(item.text)
        }
     }
+
+
 }
