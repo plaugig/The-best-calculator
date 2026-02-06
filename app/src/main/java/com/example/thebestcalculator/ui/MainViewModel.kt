@@ -63,8 +63,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun removeLast() {
-        if (_conditionText.value.isNotEmpty()) {
-            _conditionText.value = _conditionText.value.dropLast(1)
+        if (_resultText.value.isNotEmpty()) {
+            _resultText.value = _resultText.value.dropLast(1)
         }
     }
 
