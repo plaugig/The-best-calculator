@@ -3,6 +3,7 @@ package com.example.thebestcalculator.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thebestcalculator.domain.MainInteractor
+import com.example.thebestcalculator.ui.item.ItemData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainInteractor: MainInteractor
-) : ViewModel() {
+) : ViewModel(), MainTaskListener {
 
     private val _conditionText = MutableStateFlow("")
     val conditionText: StateFlow<String> = _conditionText.asStateFlow()
@@ -78,6 +79,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
-
+    override fun onBottonClick(item: ItemData) {
+        when (item.text){
+            "Ac" -> clear()
+            "⌫" -> removeLast()
+            "=" -> calculate()
+            else -> addSymbol(item.text)
+        }
+    }
 }
