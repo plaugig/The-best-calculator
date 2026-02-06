@@ -4,18 +4,18 @@ import com.example.thebestcalculator.data.calculator.AppData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class Interactor @Inject constructor(
-    private val useCase: UseCase
+class MainInteractor @Inject constructor(
+    private val calculatorUseCase: CalculatorUseCase
 ) {
     fun getSaveData(): Flow<AppData?> {
-        return useCase.getSaveData()
+        return calculatorUseCase.getSaveData()
     }
 
     suspend fun calculate(expression: String): String {
-        return useCase.calculate(expression)
+        return calculatorUseCase.calculate(expression)
     }
 
     suspend fun clearHistory() {
-        useCase.clearHistory()
+        calculatorUseCase.clearHistory()
     }
 }

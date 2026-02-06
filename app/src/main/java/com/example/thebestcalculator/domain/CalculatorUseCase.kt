@@ -3,12 +3,11 @@ package com.example.thebestcalculator.domain
 import com.example.thebestcalculator.data.calculator.AppData
 import com.example.thebestcalculator.data.calculator.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
-import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
 import javax.inject.Inject
 
 
-class UseCase @Inject constructor(
+class CalculatorUseCase @Inject constructor(
 private val repository: AppRepository
 ) {
     fun getSaveData(): Flow<AppData?> {

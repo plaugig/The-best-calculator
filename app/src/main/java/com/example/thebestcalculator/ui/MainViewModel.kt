@@ -2,7 +2,7 @@ package com.example.thebestcalculator.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.thebestcalculator.domain.Interactor
+import com.example.thebestcalculator.domain.MainInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val interactor: Interactor
+    private val mainInteractor: MainInteractor
 ) : ViewModel() {
 
     private val _conditionText = MutableStateFlow("")
@@ -21,6 +21,17 @@ class MainViewModel @Inject constructor(
 
     private val _resultText = MutableStateFlow("")
     val resultText: StateFlow<String> = _resultText.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            mainInteractor.getSaveData().collect { lastData ->
+                if (lastData != null) {
+                    _conditionText.value = lastData.expression
+                    _resultText.value = lastData.result
+                }
+            }
+        }
+    }
 
     fun addSymbol(symbol: String) {
         val currentText = _resultText.value
@@ -47,7 +58,7 @@ class MainViewModel @Inject constructor(
         _resultText.value = ""
 
         viewModelScope.launch {
-            interactor.clearHistory()
+            mainInteractor.clearHistory()
         }
     }
 
@@ -60,22 +71,13 @@ class MainViewModel @Inject constructor(
     fun calculate() {
         viewModelScope.launch {
             val expression = _resultText.value
-            val result = interactor.calculate(expression)
+            val result = mainInteractor.calculate(expression)
 
             _conditionText.value = expression
             _resultText.value = result
         }
     }
 
-    init {
-        viewModelScope.launch {
-            interactor.getSaveData().collect { lastData ->
-                if (lastData != null) {
-                    _conditionText.value = lastData.expression
-                    _resultText.value = lastData.result
-                }
-            }
-        }
-    }
+
 
 }
