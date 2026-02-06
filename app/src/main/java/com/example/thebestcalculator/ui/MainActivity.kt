@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), MainTaskListener{
+class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity(), MainTaskListener{
         isDouble = isDouble
     )
 
-    val bottons = listOf(
+    private val buttons = listOf(
         // Ряд 1
         ac("Ac"), ac("⌫"), op("%"), op("卍"),
         // Ряд 2
@@ -70,21 +69,20 @@ class MainActivity : AppCompatActivity(), MainTaskListener{
             BottonItemDecoration(this)
         )
 
-        adapter = MainAdapter(this, bottons)
-
         val manager = GridLayoutManager(this, 4)
         manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (bottons[position].isDouble) 2 else 1
+                return if (buttons[position].isDouble) 2 else 1
             }
         }
-        binding.buttons.layoutManager = manager
 
-
+        adapter = MainAdapter(viewModel, buttons)
         binding.buttons.adapter = adapter
+        binding.buttons.layoutManager = manager
 
         setupObservers()
     }
+
     private fun setupObservers(){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -101,15 +99,4 @@ class MainActivity : AppCompatActivity(), MainTaskListener{
             }
         }
     }
-
-    override fun onBottonClick(item: ItemData) {
-       when (item.text){
-           "Ac" -> viewModel.clear()
-           "⌫" -> viewModel.removeLast()
-           "=" -> viewModel.calculate()
-           else -> viewModel.addSymbol(item.text)
-       }
-    }
-
-
 }

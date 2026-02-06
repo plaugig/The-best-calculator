@@ -5,17 +5,26 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MainInteractor @Inject constructor(
-    private val calculatorUseCase: CalculatorUseCase
+    private val calculatorUseCase: CalculatorUseCase,
+    private val historyUseCase: HistoryUseCase
 ) {
+
     fun getSaveData(): Flow<AppData?> {
-        return calculatorUseCase.getSaveData()
+        return historyUseCase.getSaveData()
     }
 
     suspend fun calculate(expression: String): String {
-        return calculatorUseCase.calculate(expression)
+        val result = calculatorUseCase.calculate(expression)
+
+        historyUseCase.saveInput(
+            expression = expression,
+            result = result
+        )
+
+        return result
     }
 
     suspend fun clearHistory() {
-        calculatorUseCase.clearHistory()
+        historyUseCase.clearHistory()
     }
 }

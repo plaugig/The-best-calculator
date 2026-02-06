@@ -15,8 +15,8 @@ class LocalAppDataSource @Inject constructor(
         database.appDao().saveCurrentInput(input)
     }
 
-    fun observeInput(): Flow<AppEntity?> {
-        return database.appDao().observeCurrentInput()
+    fun getInput(): Flow<AppEntity?> {
+        return database.appDao().getCurrentInput()
             .distinctUntilChanged()
             .flowOn(Dispatchers.IO)
     }

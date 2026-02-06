@@ -15,7 +15,7 @@ interface AppDao {
 suspend fun saveCurrentInput(input: AppEntity)
 
 @Query("SELECT * FROM calculator WHERE id = 1")
-fun observeCurrentInput(): Flow<AppEntity?>
+fun getCurrentInput(): Flow<AppEntity?>
 
 @Query("DELETE FROM calculator")
 suspend fun clearCurrentInput()
